@@ -38,66 +38,39 @@ var arrData = [];
 
 var today = new Date();
 app.get('/tweet', (req,res)=>{
-  // var params = {count:100,tweet_mode='extended'};
-  T.get('search/tweets', { q: '#pemilu2019',tweet_mode=extended }, function(err, data, response) {  
-    res.end(JSON.stringify(data));
+  T.get('search/tweets', { q: '#pemilu2019',tweet_mode:'extended',count:200 }, function(err, data, response) {
+    
+    console.log(data);
+    
     data.statuses.forEach(function(tweet){
-      arrData.push(tweet.text);
-      // console.log("tweet : "+tweet.text);
+      arrData.push(tweet.full_text);
+      
+     
     });
-    fs.writeFile("/tmp/twitter_data/"+today,JSON.stringify(arrData),function(err){
-      if(err){
-        return console.log(err);
-      }
-      console.log("the file was saved");
-    });
-    // var jsonData = JSON.parse(data);
-   // obj.statuses.push(data);
-    // arrData.push(data.text);
-    // const tasks = JSON.stringify(data);
-    // obj['statuses'](function(data){
-    //   console.log(data);
-    // });
-    // obj.statuses.statuses.forEach(function(item){
-    //   console.log(item.text);
-    // });
-    // console.log(arrData);
-    // obj.forEach(function (data) {
-    //   arrData.push(data.text);
-    //   console.log(data);
-    //   // arrData.push(data.text);
-    // });
-    // arrData = obj.statuses.map(function (data){
-    //   console.log(data.text);
-    //   return data.text;
-    // });
-    // for(var i=0; i<obj.length;i++){
-    //   var counter = obj[i];
-    //   console.log(counter);
-    // }
+    res.end(JSON.stringify(data));
+
+    //Linux
     // fs.writeFile("/tmp/twitter_data/"+today,JSON.stringify(arrData),function(err){
     //   if(err){
     //     return console.log(err);
     //   }
     //   console.log("the file was saved");
     // });
-   // console.log(data);
-  });
-})
 
+    //Windows
+     fs.writeFile("percobaan.txt",JSON.stringify(arrData),function(err){
+      if(err){
+        return console.log(err);
+      }
+      console.log("the file was saved");
+    });
 
-// var http = http.createServer(function (req, res){
-//   T.get('search/tweets', { q: '#pemilu2019', count : 100 }, function(err, data, response) {  
-//     res.end(JSON.stringify(data));
-//     console.log(data);
-//   })
+    
 
-// });
-//http.listen(4000);
-
-// server.listen(port, hostname, ()=>{
-//   console.log('server = ${hostname}');
-// });
+  })
+});
+    
+    
 app.listen(4000,()=>{
   console.log("heheh");
-})
+});
