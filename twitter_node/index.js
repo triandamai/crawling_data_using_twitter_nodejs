@@ -1,7 +1,12 @@
 const Twit = require ('twit');
-const http = require ('http');
 const fs = require ('fs');
 var express = require('express');
+//buat prosesing data
+var natural = require('natural');
+var TfIdf = natural.TfIdf;
+var tfidf = new TfIdf();
+var tokenizer = new natural.WordTokenizer();
+var today = new Date();
 
 var cors = require('cors');
 
@@ -20,34 +25,26 @@ const T = new Twit({
 });
 
 var obj = {
-  statuses: []
+  tokenizing: [],
+  stemming : [],
+  text_mentah :[]
+  
 }
 
-var arrData = [];
 
-
-// const server = http.createServer((req, res)=>{
-//   res.statusCode = 200;
-//   res.setHeader('Content-Type', 'application/json')
-//   res.
-//   T.get('search/tweets', { q: '#pemilu2019', count : 100 }, function(err, data, response) {  
-//     res.end(JSON.stringify(data));
-//    // console.log(data);
-//   });
-// });
-
-var today = new Date();
 app.get('/tweet', (req,res)=>{
   T.get('search/tweets', { q: '#pemilu2019',tweet_mode:'extended',count:200 }, function(err, data, response) {
     
-    console.log(data);
-    
     data.statuses.forEach(function(tweet){
-      arrData.push(tweet.full_text);
-      
-     
+      obj.text_mentah.push(tweet.full_text);
     });
-    res.end(JSON.stringify(data));
+    const string = obj.text_mentah.toString();
+    
+    obj.tokenizing.push(tokenizer.tokenize(string));
+    obj.stemming.push(natural.StemmerId.stem(obj.tokenizing.toString()));
+
+    res.end(JSON.stringify(obj));
+
 
     //Linux
     // fs.writeFile("/tmp/twitter_data/"+today,JSON.stringify(arrData),function(err){
@@ -58,19 +55,15 @@ app.get('/tweet', (req,res)=>{
     // });
 
     //Windows
-     fs.writeFile("percobaan.txt",JSON.stringify(arrData),function(err){
+     fs.writeFile("hasil.json",JSON.stringify(obj,null,4),function(err){
       if(err){
         return console.log(err);
       }
       console.log("the file was saved");
     });
-
-    
-
   })
 });
     
-    
 app.listen(4000,()=>{
-  console.log("heheh");
+  console.log("port:4000");
 });
