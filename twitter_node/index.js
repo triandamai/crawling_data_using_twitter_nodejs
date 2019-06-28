@@ -28,24 +28,27 @@ var obj = {
   tokenizing: [],
   stemming : [],
   text_mentah :[]
-  
 }
-
-
+var parameter ={
+  q: '#pemilu2019',
+  tweet_mode:'extended',
+  count:200
+}
+app.get('/react',(req,res)=>{
+  T.get('search/tweets', parameter, function(err, data, response) {
+    res.end(JSON.stringify(data,null,4));
+  });
+});
 app.get('/tweet', (req,res)=>{
-  T.get('search/tweets', { q: '#pemilu2019',tweet_mode:'extended',count:200 }, function(err, data, response) {
-    
+  T.get('search/tweets', parameter, function(err, data, response) {
     data.statuses.forEach(function(tweet){
       obj.text_mentah.push(tweet.full_text);
     });
     const string = obj.text_mentah.toString();
-    
     obj.tokenizing.push(tokenizer.tokenize(string));
     obj.stemming.push(natural.StemmerId.stem(obj.tokenizing.toString()));
 
     res.end(JSON.stringify(obj));
-
-
     //Linux
     // fs.writeFile("/tmp/twitter_data/"+today,JSON.stringify(arrData),function(err){
     //   if(err){
