@@ -50,20 +50,35 @@ app.get('/tweet', (req,res)=>{
 
     res.end(JSON.stringify(obj));
     //Linux
-    // fs.writeFile("/tmp/twitter_data/"+today,JSON.stringify(arrData),function(err){
+
+    fs.writeFile('/tmp/twitter_data/Full_tweet_data_'+today,JSON.stringify(obj.text_mentah,null,4),function(err){
+      if(err){
+        return console.log(err);
+      }
+      console.log("Tweet data was saved");
+    });
+
+    fs.writeFile('/tmp/twitter_data/Token_data_'+today,JSON.stringify(obj.tokenizing,null,4),function(err){
+      if(err){
+        return console.log(err);
+      }
+      console.log("Token data was saved");
+    });
+
+    fs.writeFile('/tmp/twitter_data/Stemming_data'+today,JSON.stringify(obj.stemming,null,4),function(err){
+      if(err){
+          return console.log(err);
+      }
+      console.log("Stemming Data was saved");
+    });
+
+    //Windows
+    //  fs.writeFile("hasil.json",JSON.stringify(obj,null,4),function(err){
     //   if(err){
     //     return console.log(err);
     //   }
     //   console.log("the file was saved");
     // });
-
-    //Windows
-     fs.writeFile("hasil.json",JSON.stringify(obj,null,4),function(err){
-      if(err){
-        return console.log(err);
-      }
-      console.log("the file was saved");
-    });
   })
 });
     
