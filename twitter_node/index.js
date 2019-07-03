@@ -29,58 +29,69 @@ var obj = {
   stemming : [],
   text_mentah :[]
 }
+
+var data = "Dan karena budidaya ikan Nila ini termasuk mudah semua orang pun bisa menjalankannya tanpa harus mengganggu pekerjaan utama Anda saat ini"
+
+var tbi = {
+  tokenizing: []
+}
+
+tbi.tokenizing.push(tokenizer.tokenize(data))
+console.log(tbi);
+
 var parameter ={
   q: '#pemilu2019',
   tweet_mode:'extended',
   count:200
 }
-app.get('/react',(req,res)=>{
-  T.get('search/tweets', parameter, function(err, data, response) {
-    res.end(JSON.stringify(data,null,4));
-  });
-});
-app.get('/tweet', (req,res)=>{
-  T.get('search/tweets', parameter, function(err, data, response) {
-    data.statuses.forEach(function(tweet){
-      obj.text_mentah.push(tweet.full_text);
-    });
-    const string = obj.text_mentah.toString();
-    obj.tokenizing.push(tokenizer.tokenize(string));
-    obj.stemming.push(natural.StemmerId.stem(obj.tokenizing.toString()));
+// app.get('/react',(req,res)=>{
+//   T.get('search/tweets', parameter, function(err, data, response) {
+//     res.end(JSON.stringify(data,null,4));
+//   });
+// });
 
-    res.end(JSON.stringify(obj));
-    //Linux
+// app.get('/tweet', (req,res)=>{
+//   T.get('search/tweets', parameter, function(err, data, response) {
+//     data.statuses.forEach(function(tweet){
+//       obj.text_mentah.push(tweet.full_text);
+//     });
+//     const string = obj.text_mentah.toString();
+//     obj.tokenizing.push(tokenizer.tokenize(string));
+//     obj.stemming.push(natural.StemmerId.stem(obj.tokenizing.toString()));
 
-    fs.writeFile('/tmp/twitter_data/Full_tweet_data_'+today,JSON.stringify(obj.text_mentah,null,4),function(err){
-      if(err){
-        return console.log(err);
-      }
-      console.log("Tweet data was saved");
-    });
+//     res.end(JSON.stringify(obj));
+//     //Linux
 
-    fs.writeFile('/tmp/twitter_data/Token_data_'+today,JSON.stringify(obj.tokenizing,null,4),function(err){
-      if(err){
-        return console.log(err);
-      }
-      console.log("Token data was saved");
-    });
+//     fs.writeFile('/tmp/twitter_data/Full_tweet_data_'+today,JSON.stringify(obj.text_mentah,null,4),function(err){
+//       if(err){
+//         return console.log(err);
+//       }
+//       console.log("Tweet data was saved");
+//     });
 
-    fs.writeFile('/tmp/twitter_data/Stemming_data'+today,JSON.stringify(obj.stemming,null,4),function(err){
-      if(err){
-          return console.log(err);
-      }
-      console.log("Stemming Data was saved");
-    });
+//     fs.writeFile('/tmp/twitter_data/Token_data_'+today,JSON.stringify(obj.tokenizing,null,4),function(err){
+//       if(err){
+//         return console.log(err);
+//       }
+//       console.log("Token data was saved");
+//     });
 
-    //Windows
-    //  fs.writeFile("hasil.json",JSON.stringify(obj,null,4),function(err){
-    //   if(err){
-    //     return console.log(err);
-    //   }
-    //   console.log("the file was saved");
-    // });
-  })
-});
+//     fs.writeFile('/tmp/twitter_data/Stemming_data'+today,JSON.stringify(obj.stemming,null,4),function(err){
+//       if(err){
+//           return console.log(err);
+//       }
+//       console.log("Stemming Data was saved");
+//     });
+
+//     //Windows
+//     //  fs.writeFile("hasil.json",JSON.stringify(obj,null,4),function(err){
+//     //   if(err){
+//     //     return console.log(err);
+//     //   }
+//     //   console.log("the file was saved");
+//     // });
+//   })
+// });
     
 app.listen(4000,()=>{
   console.log("port:4000");
